@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>JsonMock</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">JsonMock</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" data-toggle="modal" data-target="#help">Help</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar" id="left_navi">
+            
+          </ul>
+          <ul><button type="button" class="btn btn-info" data-toggle="modal" data-target="#addProject">添加项目</button><button type="button" class="btn btn-danger" style="margin-left:10px" onclick="removeProject()">删除项目</button></ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header" id="projectname">Welcome to JsonMock</h1>
+
+          <h2 class="sub-header">接口列表</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>接口</th>
+                  <th>返回</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="interface_table">
+                
+              </tbody>
+            </table>
+            <div style="text-align:center" >
+            <button type="button" class="btn btn-info" data-toggle="modal" id="add_interface_btn" disabled="true" data-target="#addInterface">添加接口</button>
+            <button type="button" class="btn btn-success" id="success_btn" disabled="true" onclick="successSave()">生效</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="js/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="js/jsoneditor.min.js"></script>
+    <script src="jsonmock.js"></script>
+  </body>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">修改 JSON</h4>
+        </div>
+        <div class="modal-body">
+            <div id="jsoneditor" style="width: 500px; height: 400px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="modifyJson()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">添加项目</h4>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+              <span class="input-group-addon" id="sizing-addon2">请输入项目名</span>
+              <input type="text" class="form-control" id="add_project_name" placeholder="Username" aria-describedby="sizing-addon2">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="createProject()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <div class="modal fade" id="addInterface" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">添加接口</h4>
+        </div>
+        <div class="modal-body">
+            <div class="input-group">
+              <span class="input-group-addon" id="sizing-addon2">接口名(以/开始)</span>
+              <input type="text" class="form-control" id="add_interface_name" placeholder="Username" aria-describedby="sizing-addon2">
+            </div>
+
+            <div style="margin-top:20px" id="jsoneditor2" style="width: 500px; height: 400px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" onclick="addInterface()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">HELP</h4>
+        </div>
+        <div class="modal-body">
+        <p>
+          1.添加项目<br>
+          2.添加接口<br>
+          3.点击生效<br>
+        </p>
+        <p>
+        安装说明：<br>
+          1.安装nodejs<br>
+          2.安装npm<br>
+          3.安装express<br>
+          4.拷贝目录<br>
+          5.设定80端口，方便绑定host iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 3000<br>
+          6.运行set DEBUG=testRunner &amp; npm start<br>
+          7.打开页面/jsonmock/JsonMock.html#<br>
+        </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</html>
