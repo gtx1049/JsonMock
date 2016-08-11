@@ -170,11 +170,18 @@ function deleteInterface(obj){
 
 function successSave(){
 
+	id = localStorage.getItem("id");
+	if(id == null){
+		id = (new Date()).valueOf();
+		localStorage.setItem("id", id);
+	}
+
 	$.ajax({ 
 		type: "post", 
 		url: "/register/interface", 
 		dataType: "json",
 		data: currentProject_interface,
+		headers : {'id': id},
 		success: function (data) { 
 			alert("success");
 		}, 

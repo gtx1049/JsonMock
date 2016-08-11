@@ -11,14 +11,23 @@ router.get('/', function(req, res) {
   res.render('JsonMock', { title: 'Express' });
 });
 
-var interfaces;
+router.post('/debug', function(req, res){
+	res.set({'Content-Type':'text/json','Encodeing':'utf8'}); 
+	res.send(interfacetable);
+});
+
+var interfacetable = {};
+//var interfaces;
 var registertable = {};
 
-var intefral = {"code":0,"info":"ok","desc":"成功","data":{"list":[{"title":"xx", "content":"11","action":"ee"},{"title":"xx", "content":"11","action":"ee"},{"title":"xx", "content":"11","action":"ee"}]}};
 router.post('/register/interface', function(req, res){
     res.set({'Content-Type':'text/json','Encodeing':'utf8'}); 
 
-    interfaces = req.body;
+    var interfaces = req.body;
+    var id = req.headers['id'];
+    //console.log(id);
+
+    interfacetable[id] = interfaces;
 
     var count = interfaces['count'];
 
@@ -36,15 +45,20 @@ router.post('/register/interface', function(req, res){
 
 	    		url = req.url;
 
-	    		var localcount = interfaces['count'];
+	    		for (var idinner in interfacetable) {
+	    			
+					var interfacesinner = interfacetable[idinner];
+					
+					var localcount = interfacesinner['count'];
 
-	    		var localjson;
-			    for(var i = 0; i < localcount; i++){
-			    	var localitem = interfaces[i.toString()];
-			    	var localinterface = localitem['interfaceName'];
-			    	if(localinterface == url)
-			    		localjson = localitem['json'];
-			    }
+		    		var localjson;
+				    for(var i = 0; i < localcount; i++){
+				    	var localitem = interfacesinner[i.toString()];
+				    	var localinterface = localitem['interfaceName'];
+				    	if(localinterface == url)
+				    		localjson = localitem['json'];
+				    }
+				}
 
 	    		res.send(JSON.parse(localjson))
 	    	});
